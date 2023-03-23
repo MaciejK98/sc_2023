@@ -6,11 +6,15 @@ class User:
     
     def __init__(self):
         self.ConnectedBaseStation= 'A'
-        self.DistanceToBaseStation= 2000
-        self.Speed= self.GeneratedSpeed
+        self.DistanceToBaseStation= 2000 #meters
+        self.MovementSpeed= self.GeneratedSpeed
+        self.TimePassed= 20 #ms
         
     def GeneratedSpeed(): 
         return np.random(5,50) #change to proper generator
+        
+    def ChangePosition(self):
+        self.DistanceToBaseStation+=self.MovementSpeed*self.TimePassed/1000
         
     def PwrReceived(self):
         # print("Received Power From Base Station")
