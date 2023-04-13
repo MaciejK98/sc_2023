@@ -4,13 +4,14 @@ class User:
     # ConnectedBaseStation= "A"
     # DistanceToBaseStation= 2000
     
-    def __init__(self):
-        self.ConnectedBaseStation= 'A'
-        self.DistanceToBaseStation= 2000 #meters
-        self.MOVEMENTSPEED= self.GeneratedSpeed
+    def __init__(self, user_id):
+        self.UserId = user_id  # unikalny identyfikator użytkownika
+        self.ConnectedBaseStation= 'Station A'
+        self.Location= 2000 #meters
+        self.MOVEMENTSPEED= self.GenerateSpeed
         self.TimePassed= 20 #ms
         
-    def GeneratedSpeed(): 
+    def GenerateSpeed(): 
         return np.random(5,50) #change to proper generator
         
     def ChangePosition(self):
@@ -18,11 +19,18 @@ class User:
         
     def PwrReceived(self):
         # print("Received Power From Base Station")
-        CalculatedPower=4.56 - 22*np.log10(self.DistanceToBaseStation)# + random
+        CalculatedPower= {}
+        CalculatedPower['Station A'] =4.56 - 22*np.log10(self.Location)# + random
+        CalculatedPower['Station B'] =4.56 - 22*np.log10(5000-self.Location)# + random
+
         return CalculatedPower
     
     def CommitHandOver(self):
-        self.ConnectedBaseStation= 'B'
+        self.ConnectedBaseStation= 'Station B'
     
-    # def ReportPower(self):
+    def ReportPower(self):
+        report = ""
+        for station_id, power in self.PwrReceived.items():
+            report += f"Station {station_id}: {power} dBm\n"
+        return report
         
