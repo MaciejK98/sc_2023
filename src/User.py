@@ -1,6 +1,8 @@
+import random
+import Process
 import numpy as np
 
-class User:
+class User(Process):
     # ConnectedBaseStation= "A"
     # DistanceToBaseStation= 2000
     
@@ -9,7 +11,7 @@ class User:
         self.ConnectedBaseStation= 'Station A'
         self.Location= 2000 #meters
         self.MOVEMENTSPEED= self.GenerateSpeed
-        self.TimePassed= 20 #ms
+        self.WaitTime= 20 #ms
         
     def GenerateSpeed(): 
         return np.random(5,50) #change to proper generator
@@ -19,14 +21,18 @@ class User:
         
     def PwrReceived(self):
         # print("Received Power From Base Station")
+        s = random.gauss(0, 4)
         CalculatedPower= {}
-        CalculatedPower['Station A'] =4.56 - 22*np.log10(self.Location)# + random
-        CalculatedPower['Station B'] =4.56 - 22*np.log10(5000-self.Location)# + random
+        CalculatedPower['Station A'] =4.56 - 22*np.log10(self.Location)+ s# + random
+        CalculatedPower['Station B'] =4.56 - 22*np.log10(5000-self.Location)+ s# + random
 
         return CalculatedPower
     
     def CommitHandOver(self):
-        self.ConnectedBaseStation= 'Station B'
+        if self.ConnectedBaseStation== 'Station A':
+            self.ConnectedBaseStation= 'Station B'
+        else:
+            self.ConnectedBaseStation= 'Station A'
     
     def ReportPower(self):
         report = ""
