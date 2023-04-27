@@ -2,7 +2,8 @@ import random
 import Process
 import numpy as np
 
-class User(Process):
+# class User(Process):
+class User():
     # ConnectedBaseStation= "A"
     # DistanceToBaseStation= 2000
     
