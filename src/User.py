@@ -1,5 +1,5 @@
 import random
-import Process
+from .Process import Process
 import numpy as np
 
 # class User(Process):
@@ -7,18 +7,18 @@ class User():
     # ConnectedBaseStation= "A"
     # DistanceToBaseStation= 2000
     
-    def __init__(self, user_id):
+    def __init__(self, user_id,speed):
         self.UserId = user_id  # unikalny identyfikator użytkownika
         self.ConnectedBaseStation= 'Station A'
         self.Location= 2000 #meters
-        self.MOVEMENTSPEED= self.GenerateSpeed
+        self.MOVEMENTSPEED= speed
         self.WaitTime= 20 #ms
         
-    def GenerateSpeed(): 
+    def GenerateSpeed(self): 
         return np.random(5,50) #change to proper generator
         
     def ChangePosition(self):
-        self.DistanceToBaseStation+=self.MOVEMENTSPEED*self.TimePassed/1000
+        self.Location+=self.MOVEMENTSPEED*self.WaitTime/1000
         
     def PwrReceived(self):
         # print("Received Power From Base Station")

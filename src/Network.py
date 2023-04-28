@@ -1,7 +1,8 @@
-from User import User
+from .User import User
 # import random
     
-user = User
+# user = User(15,5)
+# user.ChangePosition()
 
 class Network:
     def __init__(self, l, n, alpha, delta, tau):
