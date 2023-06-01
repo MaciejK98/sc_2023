@@ -24,7 +24,7 @@ class generator:
         return xx,result
     
 i= int(2147483647 /(100))
-# print(i)  
+print(i)  
 j=0
 seedGenerator = generator(2137)
 for j in range(1,i*100):
@@ -32,3 +32,4 @@ for j in range(1,i*100):
   if ( j%i==0 ):
     
     print (xx)
+    # zapisac do pliku seedy
