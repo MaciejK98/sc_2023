@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class UniformGenerator:
+class UniformGenerator:# [5.50]
     def __init__(self,seed):
         self.seed=seed
         self.a=16807
@@ -10,18 +10,15 @@ class UniformGenerator:
         self.m =(self.a * self.q)+ self.r
         print(self.m)
         
-    def Generate(self):
-        # m=self.a*self.q+self.r
+    def Generate(self): #LCG
         h=(np.uint(self.seed/self.q)) 
-        # print("h: ",h)
-        # l= np.uint(self.seed%self.q)
-        # test = self.a * l - self.r * h
         xx=(self.a*(self.seed - (self.q*h))) - (self.r*h)
         if (xx<0):
             xx=xx+self.m
         result=(xx/self.m)
         self.seed=xx
-        return xx,result
+        result = result * 45 + 5
+        return result
 
 class ExponentialGenerator:
     def __init__(self, seed, intensity):
@@ -33,19 +30,18 @@ class ExponentialGenerator:
         self.intensity = intensity
 
     def Generate(self):
-        h = np.uint(self.seed / self.q)
-        l = np.uint(self.seed % self.q)
-        xx = self.a * l - self.r * h
-        if xx < 0:
-            xx = xx + self.m
-        self.seed = xx
-
+        h=(np.uint(self.seed/self.q)) 
+        xx=(self.a*(self.seed - (self.q*h))) - (self.r*h)
+        if (xx<0):
+            xx=xx+self.m
+        self.seed=xx
+        
         # Generowanie liczby o rozkładzie wykładniczym
         result = -np.log(xx / self.m) / self.intensity
 
-        return xx, result  
+        return result  
 
-class NormalGenerator:
+class NormalGenerator: #[0,4]
     def __init__(self, seed):
         self.seed = seed
         self.a = 16807
@@ -54,37 +50,43 @@ class NormalGenerator:
         self.m = (self.a * self.q) + self.r
 
     def UniformGenerator(self):
-        h = np.uint(self.seed / self.q)
-        l = np.uint(self.seed % self.q)
-        xx = self.a * l - self.r * h
-        if xx < 0:
-            xx = xx + self.m
-        self.seed = xx
+        h=(np.uint(self.seed/self.q)) 
+        xx=(self.a*(self.seed - (self.q*h))) - (self.r*h)
+        if (xx<0):
+            xx=xx+self.m
+        self.seed=xx
         return xx / self.m
-
+    #NormalGenerator tak, aby generował wartości z rozkładu o średniej 0 i odchyleniu standardowym 4, możesz zastosować transformację Boxa-Mullera do generatora jednostajnego.
     def Generate(self):
         u1, u2 = self.UniformGenerator(), self.UniformGenerator()
         r = np.sqrt(-2 * np.log(u1))
         theta = 2 * np.pi * u2
-        x = r * np.cos(theta)
+        z1 = r * np.cos(theta)
+        z2 = r * np.sin(theta)
+        x = 4 * z1  # Odchylenie standardowe = 4
         return x
 
+
+if __name__ == '__main__':
 # Tworzenie generatora
-seed = 2137
-generator = NormalGenerator(seed)
+    seed = 2137
+    generator = NormalGenerator(seed)
 
 # Generowanie próbki wartości o rozkładzie normalnym
-sample_size = 100000
-sample = [generator.Generate() for _ in range(sample_size)]
+    sample_size = 100000
+    sample = [generator.Generate() for _ in range(sample_size)]
 
 # Tworzenie histogramu
-import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
 
-plt.hist(sample, bins=30, edgecolor='black')
-plt.xlabel('Wartość')
-plt.ylabel('Częstość')
-plt.title('Histogram próbki wartości o rozkładzie normalnym (metoda odwrotności dystrybuanty)')
-plt.show()
+    plt.hist(sample, bins=30, edgecolor='black')
+    plt.xlabel('Wartość')
+    plt.ylabel('Częstość')
+    plt.title('Histogram próbki wartości o rozkładzie normalnym (metoda odwrotności dystrybuanty)')
+    plt.show()
+
+
+
 
 # i= int(2147483647 /(100))
 # # print(i)  

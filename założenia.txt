@@ -1,0 +1,10 @@
+1. ściągamy proces z agendy(pop) -> stan GENERATE_USER
+
+2. jeżeli jest 20 userów w networku 
+procesów w agendzie też musi być 20 to obecny proces niszczymy -> stan terminated=True, active=False 
+
+3. zwiekszamy counter kolejki 
+
+4.tworzymy i planujemy nowy w miejsce obecnego -> mamy 21 procesów
+
+5. wracamy do symulacji, spełnia sie warunek isTerminated i obecny proces znika, a w agendzie jest dalej 21 procesów

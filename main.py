@@ -1,22 +1,35 @@
 import time
 
-from src.generator1 import generator
+# from src.Generators import UniformGenerator, ExponentialGenerator, NormalGenerator
 from src.Network import Network
-from src.User import User
+# from src.User import User
+from src.Simulator import Simulator
 
 # from src.User import User
 # from src.Process import Process
 # from .src import src
 # generator(1)
 
-network = Network(1, 1, 1, 1, 1)
-user1 = User(111, 50, 3)
-i = 0
+# network = Network(1, 1, 1, 1, 1)
+# user1 = User(111, 50, 3)
+# i = 0
+# for j in range(30):
+#     user = User(user_id=j, speed=10, alpha=5)
+#     network.addUser(user)
+    
 
-network.AddUser(user1)
-print(network.howMuchUsers())
-print(network.findUser(user1.UserID).PwrBSA())
+# print(network.howMuchUsersInSystem())
+# print(network.howMuchUsersInQueue())
+# # print(network.findUser(user.UserID).PwrBSA())
 
+
+
+if __name__ == '__main__':
+    
+    network = Network()
+    simulator = Simulator(network)
+    simulator.run(1000000)
+    
 
 # while user1.Location<3001:
 #   # print ("Silmulation goes brrr")
