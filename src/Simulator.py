@@ -1,11 +1,14 @@
 import heapq
 from .User import User
 from .Generators import RNG
+import csv
 
-seeds = [2137, 1337, 80085, 58008]
+seeds = [2137, 2137, 2137, 4]
 X= 2000
-alpha = 3.0
-LAMBDA = 0.35
+alpha = 3.5
+LAMBDA = 0.4 #wieksza lambda - czesciej tworzących użytkowników max 0.4
+# uuid=[]
+filename = "data.csv"
 
 class Simulator:
     test=True
@@ -17,30 +20,32 @@ class Simulator:
         self.agenda = []
 
     def run(self, howmuch):
-        print("Started Simulation, method: process interaction (M4):")
-        id = 0
-        user = User(id, X, alpha, self.clock, self.network, self.agenda, self.Generators)
-        user.activate(0)
+        
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.writer(file)
 
-        while self.network.DisconnectedUsers < howmuch:
-            if not self.agenda:
-                break
+            # Zapisz nagłówki
+            writer.writerow(['UserID', 'ConnectedBaseStation', 'CurrentLocation', 'Handovercouter', 'UsersInSystem', 'UserQueue'])
+        
+            print("Started Simulation, method: process interaction (M4):")
+            id = 0
+            user = User(id, X, alpha, self.clock, self.network, self.agenda, self.Generators,writer)
+            user.activate(0)
 
-            process = heapq.heappop(self.agenda)
-            self.clock = process.get_time()
-            # print(self.clock)
+            while self.network.DisconnectedUsers < howmuch:
+                if not self.agenda:
+                    break
 
-            # print("Simulation Time:", self.clock)
+                process = heapq.heappop(self.agenda)
+                self.clock = process.get_time()
 
-            # process.sentUserReport(resultsFile)
-            process.execute()
-            # if int(self.clock %500) == 0.0 :
-            #     if (self.clock %500) <0.02:
-            #         print("Simulation Time:", self.clock)
-                # print("Simulation Time:", self.clock)
-            if process.IsTerminated():
-                # heapq.heapify(self.agenda)
-                # self.agenda.remove(process)
-                # heapq.heapify(self.agenda)
+                process.execute()
 
-                del process
+                if process.IsTerminated():
+
+                    del process
+            print("Finished Simulation, method: process interaction (M4):")
+        # unique_values = set(uuid)
+        # count = len(unique_values)
+        # print(count)
+        # print(uuid) 

@@ -29,13 +29,8 @@ class Network:
         if user in self.users:
             self.users.remove(user)
             self.DisconnectedUsers += 1
-            
-    def getUserFromQueue(self):
-        return self.fifo_queue.get()
-        
+                 
     def howMuchUsersInSystem(self):
         return len(self.users)
 
-    def howMuchUsersInQueue(self):
-        return self.fifo_queue.qsize()
     
