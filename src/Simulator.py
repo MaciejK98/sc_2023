@@ -1,46 +1,42 @@
 import heapq
 from .User import User
-from .Generators import UniformGenerator, ExponentialGenerator, NormalGenerator
+from .Generators import RNG
 
-seed = [2137, 1337, 80085, 58008]
+seeds = [2137, 1337, 80085, 58008]
 X= 2000
 alpha = 3.0
-TTT=100 
-WAITTIME= 20
-DELTA = 20
-LAMBDA = 0.5
+LAMBDA = 0.35
 
 class Simulator:
     test=True
     
     def __init__(self, network):
         self.network = network
-        self.speedGenerator = UniformGenerator(seed[0])
-        self.spawnTimeGenerator = ExponentialGenerator(seed[1],LAMBDA)
-        self.BSApowerGenerator = NormalGenerator(seed[2])
-        self.BSBPowerGenerator = NormalGenerator(seed[3])
+        self.Generators= RNG(seeds, LAMBDA)
         self.clock = 0
         self.agenda = []
 
-    def run(self, time):
+    def run(self, howmuch):
         print("Started Simulation, method: process interaction (M4):")
         id = 0
-        user = User(id, X, self.speedGenerator, alpha, DELTA, TTT, WAITTIME, self.clock+5, self.network, self.agenda, self.spawnTimeGenerator, self.BSApowerGenerator, self.BSBPowerGenerator)
+        user = User(id, X, alpha, self.clock, self.network, self.agenda, self.Generators)
         user.activate(0)
 
-        while self.clock < time:
+        while self.network.DisconnectedUsers < howmuch:
             if not self.agenda:
                 break
 
             process = heapq.heappop(self.agenda)
             self.clock = process.get_time()
+            # print(self.clock)
 
             # print("Simulation Time:", self.clock)
 
             # process.sentUserReport(resultsFile)
             process.execute()
-            if self.clock >500:
-                pass
+            # if int(self.clock %500) == 0.0 :
+            #     if (self.clock %500) <0.02:
+            #         print("Simulation Time:", self.clock)
                 # print("Simulation Time:", self.clock)
             if process.IsTerminated():
                 # heapq.heapify(self.agenda)

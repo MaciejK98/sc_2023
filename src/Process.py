@@ -14,21 +14,19 @@ class Process:
         self.terminated = False
         self.network = network
         self.agenda = agenda
+        # self.active = False
 
     def execute(self):
         raise NotImplementedError
 
     def activate(self, time, relative=True):
         if relative:
-            # print ("Activating")
-            # print (self.time)
-            # print (time)
-            
             self.time += time
         else:
             self.time = time
 
         heapq.heappush(self.agenda, self)
+        self.active = False
 
     def IsTerminated(self):
         return self.terminated
