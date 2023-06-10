@@ -2,37 +2,51 @@ import heapq
 from .User import User
 from .Generators import RNG
 import csv
+import os
 
-seeds = [2137, 2137, 2137, 4]
+filename = "seeds.csv"  # Nazwa pliku CSV
+Seeds = []  # Lista do przechowywania zestawów ziaren
+with open(filename, mode='r') as file:
+    reader = csv.reader(file)
+
+    for row in reader:
+        seed_set = [int(seed) for seed in row]  # Konwersja ziaren na liczby całkowite
+        Seeds.append(seed_set)  # Dodanie zestawu ziaren do listy
+        
+
 X= 2000
-alpha = 3.5
-LAMBDA = 0.4 #wieksza lambda - czesciej tworzących użytkowników max 0.4
+# alpha = 3.5
+# LAMBDA = 0.4 #wieksza lambda - czesciej tworzących użytkowników max 0.4
 # uuid=[]
-filename = "data.csv"
+
 
 class Simulator:
     test=True
     
-    def __init__(self, network):
-        self.network = network
-        self.Generators= RNG(seeds, LAMBDA)
+    def __init__(self, Network, Lambda, Alpha, Begining, SeedSet):
+        self.network = Network
+        self.Generators= RNG(Seeds[SeedSet], Lambda)
         self.clock = 0
+        self.alpha=Alpha
         self.agenda = []
+        self.Begining = Begining
+        self.directory= "data"
+        self.datafilename =os.path.join(self.directory, f"data_L={Lambda}_A={Alpha}_B={Begining}_S={SeedSet}.csv")
 
     def run(self, howmuch):
         
-        with open(filename, mode='w', newline='') as file:
+        with open(self.datafilename, mode='w', newline='') as file:
             writer = csv.writer(file)
 
-            # Zapisz nagłówki
-            writer.writerow(['UserID', 'ConnectedBaseStation', 'CurrentLocation', 'Handovercouter', 'UsersInSystem', 'UserQueue'])
+            # Zapis nagłówków
+            writer.writerow(['UserID', 'ConnectedBaseStation', 'CurrentLocation', 'Handovercouter', 'UsersInSystem', 'UserQueue', 'DisconnectedUsers'])
         
             print("Started Simulation, method: process interaction (M4):")
             id = 0
-            user = User(id, X, alpha, self.clock, self.network, self.agenda, self.Generators,writer)
+            user = User(id, X, self.alpha, self.clock, self.network, self.agenda, self.Generators,writer, self.Begining)
             user.activate(0)
 
-            while self.network.DisconnectedUsers < howmuch:
+            while self.network.DisconnectedUsers <= howmuch:
                 if not self.agenda:
                     break
 
@@ -49,3 +63,4 @@ class Simulator:
         # count = len(unique_values)
         # print(count)
         # print(uuid) 
+        # self.network.DisconnectedUsers =0

@@ -24,7 +24,7 @@ class RNG:
 
         result = result * 45 + 5
 
-        return xx, result  # [5,50]
+        return result  # [5,50]
 
     def GenerateExponential(self):  # LCG
         h = np.uint(self.seedEXP / self.q)

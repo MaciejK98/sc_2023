@@ -2,7 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 
 # Wczytaj dane z pliku CSV
-filename = "data.csv"
+filename = "data_L=0.4_A=3.5_B=0_S=0.csv"
 users_in_system = []
 user_queue = []
 count_current_location = 0
@@ -37,7 +37,7 @@ import csv
 import matplotlib.pyplot as plt
 
 # Wczytaj dane z pliku CSV
-filename = "data.csv"
+# filename = "data.csv"
 handover_counter = []
 
 with open(filename, mode='r') as file:

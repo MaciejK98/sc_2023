@@ -12,7 +12,7 @@ class User(Process):  # class User:
     STARTINGTTT = 5
     ttt = 0  # 100ms -> 5 time
 
-    def __init__(self, user_id, X, alpha, time, network, agenda, generators, writer):
+    def __init__(self, user_id, X, alpha, time, network, agenda, generators, writer, Begining):
         super().__init__(time, network, agenda)
 
         self.UserID = user_id  # unikalny identyfikator użytkownika
@@ -29,8 +29,10 @@ class User(Process):  # class User:
         self.Handovercouter =0
         
         self.writer= writer
+        self.skipBegining = Begining
 
     def ChangePosition(self):
+        
         self.CurrentLocation += self.Speed * 20 / 1000
 
     def CalulatePower(self):
@@ -60,7 +62,7 @@ class User(Process):  # class User:
         # return report
     
     def report(self):
-        report =[self.UserID, self.ConnectedBaseStation, self.CurrentLocation, self.Handovercouter, self.network.howMuchUsersInSystem() ,self.network.UserQueue]
+        report =[self.UserID, self.ConnectedBaseStation, self.CurrentLocation, self.Handovercouter, self.network.howMuchUsersInSystem() ,self.network.UserQueue, self.network.DisconnectedUsers]
         return report
 
     # def IsDeltaConditionTrue(self, BSA, BSB):
@@ -94,7 +96,7 @@ class User(Process):  # class User:
                     self.network.AllUsers += 1
                     new_id = self.network.AllUsers #+ 1
                     
-                    new_user = User(new_id, self.StartLocation, self.alpha, self.Timer, self.network, self.agenda, self.Generators, self.writer)
+                    new_user = User(new_id, self.StartLocation, self.alpha, self.Timer, self.network, self.agenda, self.Generators, self.writer, self.skipBegining)
                     new_user.activate(self.Generators.GenerateExponential())
 
                     if len(self.agenda) >= 21:
@@ -149,11 +151,12 @@ class User(Process):  # class User:
                 case self.State.DELETE_USER:  # delete user
                     # report =
                     # print(report)
-                    self.writer.writerow(self.report())
+                    if self.network.DisconnectedUsers > self.skipBegining:
+                        self.writer.writerow(self.report())
                     self.network.removeUserFromSystem(self)
                     
                     if self.network.UserQueue > 0:
-                        new_user = User(self.network.AllUsers-self.network.UserQueue, self.StartLocation, self.alpha, self.Timer, self.network, self.agenda, self.Generators,self.writer)
+                        new_user = User(self.network.AllUsers-self.network.UserQueue, self.StartLocation, self.alpha, self.Timer, self.network, self.agenda, self.Generators,self.writer, self.skipBegining)
                         new_user.state = self.State.CONNECTED_TO_BSA
                         new_user.activate(0.02)
                         self.network.UserQueue -= 1
