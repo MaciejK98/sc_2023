@@ -7,44 +7,45 @@ class RNG:
         self.seedEXP = seeds[0]
         self.seedUNI = seeds[1]
         self.seedNOR = seeds[2]
-        self.seedNORB = seeds[3]
-        self.a = 16807
-        self.q = 127773
-        self.r = 2836
-        self.m = (self.a * self.q) + self.r
+        # self.seedNORB = seeds[3]
+        self.A = 16807
+        self.Q = 127773
+        self.R = 2836
+        self.M = (self.A * self.Q) + self.R
         self.intensity = intensity
 
     def GenerateUniform(self):  # LCG
-        h = np.uint(self.seedUNI / self.q)
-        xx = (self.a * (self.seedUNI - (self.q * h))) - (self.r * h)
-        if xx < 0:
-            xx = xx + self.m
-        result = xx / self.m
-        self.seedUNI = xx
+        h = np.floor(self.seedUNI / self.Q)
+        
+        x = (self.A * (self.seedUNI - (self.Q * h))) - (self.R * h)
+        if x < 0:
+            x = x + self.M
+        result = x / self.M
+        self.seedUNI = x
 
         result = result * 45 + 5
 
         return result  # [5,50]
 
     def GenerateExponential(self):  # LCG
-        h = np.uint(self.seedEXP / self.q)
-        xx = (self.a * (self.seedEXP - (self.q * h))) - (self.r * h)
+        h = np.floor(self.seedEXP / self.Q)
+        xx = (self.A * (self.seedEXP - (self.Q * h))) - (self.R * h)
         if xx < 0:
-            xx = xx + self.m
+            xx = xx + self.M
         self.seedEXP = xx
 
         # Generowanie liczby o rozkładzie wykładniczym
-        result = -np.log(xx / self.m) / self.intensity
+        result = -1 * (1/self.intensity) * np.log(xx / self.M)  
 
         return result
 
     def UniformGeneratorForNormal(self, seed):
-        h = np.uint(seed / self.q)
-        xx = (self.a * (seed - (self.q * h))) - (self.r * h)
+        h = np.floor(seed / self.Q)
+        xx = (self.A * (seed - (self.Q * h))) - (self.R * h)
         if xx < 0:
-            xx = xx + self.m
+            xx = xx + self.M
         seed = xx
-        return xx / self.m, seed
+        return xx / self.M, seed
 
     # NormalGenerator tak, aby generował wartości z rozkładu o średniej 0 i odchyleniu standardowym 4, możesz zastosować transformację Boxa-Mullera do generatora jednostajnego.
     # zmienne losowe z1 , z2 są niezależne i o rozkładzie normalnym
@@ -106,16 +107,16 @@ if __name__ == '__main__':
 
     plt.hist(sample, bins=40, edgecolor='black')
     plt.xlabel('Wartość')
-    plt.ylabel('Częstość')
-    plt.title('Histogram próbki wartości o rozkładzie normalnym (metoda Boxa-Mullera) [0,4]')
+    plt.ylabel('Częstość wystapień')
+    plt.title('Histogram wartości z generatora o rozkładzie normalnym [0,4]')
     plt.show()
 
     sample = [generator.GenerateExponential() for _ in range(sample_size)]
 
     plt.hist(sample, bins=40, edgecolor='black')
     plt.xlabel('Wartość')
-    plt.ylabel('Częstość')
-    title = f"Histogram próbki wartości o rozkładzie wykładniczym z Lambda= {generator.intensity}"
+    plt.ylabel('Częstość wystapień')
+    title = f"Histogram wartości z generatora o rozkładzie wykładniczym z Lambda= {generator.intensity}"
     plt.title(title)
     plt.show()
 
@@ -123,10 +124,8 @@ if __name__ == '__main__':
 
     plt.hist(sample, bins=90, edgecolor='black')
     plt.xlabel('Wartość')
-    plt.ylabel('Częstość')
-    title = "Histogram próbki wartości o rozkładzie jedostajnym z zakresu 5,50"
+    plt.ylabel('Częstość wystapień')
+    title = "Histogram wartości z generatora o rozkładzie jednostajnym z zakresu 5,50"
     plt.title(title)
     plt.show()
-
-
 
