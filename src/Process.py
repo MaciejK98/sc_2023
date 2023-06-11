@@ -14,7 +14,6 @@ class Process:
         self.terminated = False
         self.network = network
         self.agenda = agenda
-        # self.active = False
 
     def execute(self):
         raise NotImplementedError
@@ -30,9 +29,6 @@ class Process:
 
     def IsTerminated(self):
         return self.terminated
-
-    def set_terminated(self):
-        self.terminated = True
 
     def get_time(self):
         return self.time

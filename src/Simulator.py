@@ -13,16 +13,11 @@ with open(filename, mode='r') as file:
         seed_set = [int(seed) for seed in row]  # Konwersja ziaren na liczby całkowite
         Seeds.append(seed_set)  # Dodanie zestawu ziaren do listy
         
-
 X= 2000
 # alpha = 3.5
 # LAMBDA = 0.4 #wieksza lambda - czesciej tworzących użytkowników max 0.4
-# uuid=[]
-
 
 class Simulator:
-    test=True
-    
     def __init__(self, Network, Lambda, Alpha, Begining, SeedSet):
         self.network = Network
         self.Generators= RNG(Seeds[SeedSet], Lambda)
@@ -59,8 +54,3 @@ class Simulator:
 
                     del process
             print("Finished Simulation, method: process interaction (M4):")
-        # unique_values = set(uuid)
-        # count = len(unique_values)
-        # print(count)
-        # print(uuid) 
-        # self.network.DisconnectedUsers =0

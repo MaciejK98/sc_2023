@@ -8,9 +8,8 @@ class User(Process):  # class User:
     BaseStationAPower = 0
     BaseStationBPower = 0
     DELTA = 25  # db difference to disconnect the user
-
     STARTINGTTT = 5
-    ttt = 0  # 100ms -> 5 time
+    ttt = 5  # 100ms -> 5 time
 
     def __init__(self, user_id, X, alpha, time, network, agenda, generators, writer, Begining):
         super().__init__(time, network, agenda)
@@ -33,7 +32,6 @@ class User(Process):  # class User:
         
 
     def ChangePosition(self):
-        
         self.CurrentLocation += self.Speed * 20 / 1000
 
     def CalulatePower(self):
@@ -74,10 +72,9 @@ class User(Process):  # class User:
     #     else:
     #         return False
 
-    def disconnect(self):
-        print("disconnected")
-        pass
-
+    # def disconnect(self):
+    #     print("disconnected")
+    #     pass
 
     def checkDistance(self):
         self.ChangePosition()
@@ -110,7 +107,6 @@ class User(Process):  # class User:
                     self.state = self.State.CONNECTED_TO_BSA
 
                 case self.State.CONNECTED_TO_BSA:  # connected to BS-A
-                    
                     if self.checkDistance(): continue
                     
                     self.CalulatePower()
@@ -130,8 +126,8 @@ class User(Process):  # class User:
                         self.ttt = self.STARTINGTTT
                     self.activate(0.02)
 
+
                 case self.State.CONNECTED_TO_BSB:  # connected to BS-B
-                    
                     if self.checkDistance(): continue
                     
                     self.CalulatePower()
@@ -150,6 +146,7 @@ class User(Process):  # class User:
                     else:
                         self.ttt = self.STARTINGTTT
                     self.activate(0.02)
+
 
                 case self.State.DELETE_USER:  # delete user
                     # report =

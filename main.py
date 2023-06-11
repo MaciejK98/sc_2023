@@ -33,32 +33,32 @@ if __name__ == "__main__":
                         del simulator
                         del network
             else:
-                for s in range(0, 1, 1):
+                for s in range(0, args.SeedSet, 1):
                         network = Network()
                         simulator = Simulator(network, l / 100, args.AlphaMin, args.Begining, s)
                     
                         simulator.run(args.UsersToHandle)
                         del simulator
                         del network
-        else: 
-            for l in range(0, 1, 1):
-                if args.AlphaStep != 0:
-                    for a in range(int(args.AlphaMin * 10), int(args.AlphaMax * 10) + 1, int(args.AlphaStep * 10)):
-                        for s in range(0, args.SeedSet, 1):
-                            network = Network()
-                            simulator = Simulator(network, l / 100, a / 10, args.Begining, s)
+    else: 
+        for l in range(int(args.LambdaMin*100), int(args.LambdaMin*100)+1, 1):
+            if args.AlphaStep != 0:
+                for a in range(int(args.AlphaMin * 10), int(args.AlphaMax * 10) + 1, int(args.AlphaStep * 10)):
+                    for s in range(0, args.SeedSet, 1):
+                        network = Network()
+                        simulator = Simulator(network, l / 100, a / 10, args.Begining, s)
                         
-                            simulator.run(args.UsersToHandle)
-                            del simulator
-                            del network
-                else:
-                    for s in range(0, 1, 1):
-                            network = Network()
-                            simulator = Simulator(network, l / 100, args.AlphaMin, args.Begining, s)
+                        simulator.run(args.UsersToHandle)
+                        del simulator
+                        del network
+            else:
+                for s in range(0, args.SeedSet, 1):
+                        network = Network()
+                        simulator = Simulator(network, l / 100, args.AlphaMin, args.Begining, s)
                         
-                            simulator.run(args.UsersToHandle)
-                            del simulator
-                            del network
+                        simulator.run(args.UsersToHandle)
+                        del simulator
+                        del network
                 
 
 # python main.py --LambdaMin 0.3 --LambdaMax 0.4 --LambdaStep 0.02 --AlphaMin 3.5 --AlphaMax 3.5 --AlphaStep 0 --Begining 0 --SeedSet 1 --UsersToHandle 500
