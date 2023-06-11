@@ -1,8 +1,15 @@
 import csv
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Wczytaj dane z pliku CSV
-filename = "data_L=0.4_A=3.5_B=0_S=0.csv"
+
+for seed in range(0, 10):
+        # Wczytanie pliku CSV
+        filename = f"../data/lambda/data_L=0.36_A=3.5_B=0_S={seed}.csv"
+        df = pd.read_csv(filename)
+
+filename = "../data/lambda/data_L=0.36_A=3.5_B=125_S=0.csv"
 users_in_system = []
 user_queue = []
 count_current_location = 0

@@ -27,9 +27,10 @@ class User(Process):  # class User:
 
         self.alpha = alpha  # optimization of this parameter
         self.Handovercouter =0
-        
+        self.FirstHandoverLocation=0
         self.writer= writer
         self.skipBegining = Begining
+        
 
     def ChangePosition(self):
         
@@ -50,6 +51,8 @@ class User(Process):  # class User:
             self.ConnectedBaseStation = "Station A"
         self.ttt = self.STARTINGTTT
         self.Handovercouter += 1
+        if self.Handovercouter == 1:
+            self.FirstHandoverLocation = self.CurrentLocation
 
 
     # def ReportPower(self):
@@ -62,7 +65,7 @@ class User(Process):  # class User:
         # return report
     
     def report(self):
-        report =[self.UserID, self.ConnectedBaseStation, self.CurrentLocation, self.Handovercouter, self.network.howMuchUsersInSystem() ,self.network.UserQueue, self.network.DisconnectedUsers]
+        report =[self.UserID, self.ConnectedBaseStation, self.CurrentLocation, self.Handovercouter, self.FirstHandoverLocation, self.network.howMuchUsersInSystem() ,self.network.UserQueue, self.network.DisconnectedUsers]
         return report
 
     # def IsDeltaConditionTrue(self, BSA, BSB):

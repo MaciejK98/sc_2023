@@ -30,7 +30,7 @@ class Simulator:
         self.alpha=Alpha
         self.agenda = []
         self.Begining = Begining
-        self.directory= "data"
+        self.directory= "data/alpha"
         self.datafilename =os.path.join(self.directory, f"data_L={Lambda}_A={Alpha}_B={Begining}_S={SeedSet}.csv")
 
     def run(self, howmuch):
@@ -39,7 +39,7 @@ class Simulator:
             writer = csv.writer(file)
 
             # Zapis nagłówków
-            writer.writerow(['UserID', 'ConnectedBaseStation', 'CurrentLocation', 'Handovercouter', 'UsersInSystem', 'UserQueue', 'DisconnectedUsers'])
+            writer.writerow(['UserID', 'ConnectedBaseStation', 'CurrentLocation', 'Handovercouter', 'FirstHandoverLocation', 'UsersInSystem', 'UserQueue', 'DisconnectedUsers'])
         
             print("Started Simulation, method: process interaction (M4):")
             id = 0
