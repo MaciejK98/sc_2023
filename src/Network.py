@@ -13,17 +13,16 @@ class Network:
     def addUser(self, currentUser):
         if len(self.users) < self.maxUsers:
             
-            # heapq.heappush(self.users_heap, currentUser)
             self.users.append(currentUser)
             # print ("Added user")
         else:
             self.UserQueue += 1
 
-    def findUser(self, UserID):
-        for user in self.users:
-            # print(user)
-            if user.UserID == UserID:
-                return user
+    # def findUser(self, UserID):
+    #     for user in self.users:
+    #         # print(user)
+    #         if user.UserID == UserID:
+    #             return user
 
     def removeUserFromSystem(self, user):
         if user in self.users:
