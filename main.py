@@ -28,14 +28,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    def run_simulation(network, simulator, users_to_handle):
-        simulator.run(users_to_handle)
-        del simulator
-        del network
-
-    def generate_simulator(network, lambda_val, alpha_val, beginning, seed_set):
-        return Simulator(network, lambda_val, alpha_val, beginning, seed_set)
-
     lambda_range = range(int(args.LambdaMin * 100), int(args.LambdaMax * 100) + 1, int(args.LambdaStep * 100)) if args.LambdaStep else [int(args.LambdaMin * 100)]
     alpha_range = range(int(args.AlphaMin * 10), int(args.AlphaMax * 10) + 1, int(args.AlphaStep * 10)) if args.AlphaStep else [int(args.AlphaMin * 10)]
 

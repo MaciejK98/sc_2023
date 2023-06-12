@@ -17,7 +17,7 @@ class generator:
             xx=xx+self.m
         result=(xx/self.m)
         self.seed=xx
-        return xx,result
+        return int(xx),result
         
 
 def seedGenerator():
