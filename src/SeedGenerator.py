@@ -11,31 +11,40 @@ class generator:
         print(self.m)
         
     def UniformGenerator(self):
-        # m=self.a*self.q+self.r
-        h=(np.uint(self.seed/self.q)) 
-        # print("h: ",h)
-        # l= np.uint(self.seed%self.q)
-        # test = self.a * l - self.r * h
+        h = np.floor(self.seed / self.q)
         xx=(self.a*(self.seed - (self.q*h))) - (self.r*h)
         if (xx<0):
             xx=xx+self.m
         result=(xx/self.m)
         self.seed=xx
         return xx,result
-    
-    
-  
-      
-# i= int(2147483647 /(100))
-# print(i)  
-# j=0
-# seedGenerator = generator(2137)
-# for j in range(1,i*100):
-#   xx,result= seedGenerator.UniformGenerator()
-#   if ( j%i==0 ):
-    
-#     print (xx)
-#     # zapisac do pliku seedy
-    
-    
-    
+        
+
+def seedGenerator():
+    seeds=[]
+    seedGenerator = generator(123456)
+    for i in range(10):
+        for j in range(4):
+            if j == 0:
+                seeds.append([])  # Tworzenie listy dla każdego zestawu
+            xx ,res = seedGenerator.UniformGenerator()  # Wygenerowanie jednego ziarna
+            seeds[i].append(xx)  # Dodanie ziarna do odpowiedniego zestawu
+
+            # Aktualizacja ziarna
+            for _ in range(10000000):
+                seedGenerator.UniformGenerator()  # Przesunięcie generatora o 10 milionów zmiennych
+
+    # Wyświetlenie wygenerowanych ziaren
+    for i in range(10):
+        print(f"Zestaw {i+1}: {seeds[i]}")
+        
+    filename = "../seeds.csv"
+
+    import csv
+
+    with open(filename, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        for item in seeds:
+            writer.writerow(item)
+            
+seedGenerator()

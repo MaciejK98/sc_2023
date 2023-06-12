@@ -3,15 +3,16 @@ import matplotlib.pyplot as plt
 
 
 class RNG:
+    A = 16807
+    Q = 127773
+    R = 2836
+    M = (A * Q) + R
     def __init__(self, seeds, intensity):
         self.seedEXP = seeds[0]
         self.seedUNI = seeds[1]
         self.seedNOR = seeds[2]
         # self.seedNORB = seeds[3]
-        self.A = 16807
-        self.Q = 127773
-        self.R = 2836
-        self.M = (self.A * self.Q) + self.R
+        
         self.intensity = intensity
 
     def GenerateUniform(self):  # LCG
