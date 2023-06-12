@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 lambda_data = {}
 
 # Przechodzenie przez kombinacje parametrów
-for lambda_val in range(30, 41, 2):
+for lambda_val in range(32, 41, 2):
     # Inicjalizacja słownika dla danej lambdy
     lambda_dict = {'disconnected_users': [], 'avg_users': []}
     
@@ -54,7 +54,7 @@ plt.show()
 lambda_data = {}
 
 # Przechodzenie przez kombinacje parametrów
-for lambda_val in range(30, 41, 2):
+for lambda_val in range(32, 41, 2):
     # Inicjalizacja słownika dla danej lambdy
     lambda_dict = {'disconnected_users': [], 'avg_users': []}
     
@@ -111,7 +111,7 @@ avg_users_dict = {}
 confidence_intervals_dict = {}
 
 # Przechodzenie przez kombinacje parametrów
-for lambda_val in range(30, 41, 2):
+for lambda_val in range(32, 41, 2):
     # Inicjalizacja list dla danej lambdy
     lambda_list = []
     avg_users_list = []
@@ -143,7 +143,6 @@ for lambda_val, avg_users in avg_users_dict.items():
         avg_avg_users.append(avg_users_values.mean())
         
         # Obliczanie przedziału nieufności
-        n = len(avg_users_values)
         std_error = avg_users_values.std() / np.sqrt(10)
         t_value = t.ppf(0.95, df=10-1)
         confidence_interval = t_value * std_error
@@ -169,4 +168,58 @@ plt.title('Average Number of Users in System and Queue with Confidence Intervals
 plt.grid(True)
 
 # Wyświetlanie wykresu
+plt.show()
+
+
+import pandas as pd
+import numpy as np
+from scipy.stats import t
+import matplotlib.pyplot as plt
+
+lambda_values = range(32, 41, 2)
+avg_avg_users = []
+confidence_intervals = []
+
+std_devs = []
+
+for lambda_val in lambda_values:
+    avg_users_lambda = []
+    
+    for seed in range(0, 10):
+        # Wczytanie pliku CSV
+        filename = f"../data/lambda/data_L={lambda_val/100}_A=3.5_B=125_S={seed}.csv"
+        df = pd.read_csv(filename)
+        
+        sum_users = df['UsersInSystem'].sum() + df['UserQueue'].sum()
+        avg_users = sum_users / len(df)
+        avg_users_lambda.append(avg_users)
+    
+    avg_avg = np.mean(avg_users_lambda)
+    std_dev = np.std(avg_users_lambda)
+    std_devs.append(std_dev)
+    avg_avg_users.append(avg_avg)
+    
+    # Obliczanie przedziału nieufności z rozkładu t-studenta
+    dof = len(avg_users_lambda) - 1  # Stopnie swobody
+    alpha = 0.05  # Poziom istotności (95% przedział ufności)
+    t_value = t.ppf(1 - alpha/2, df=dof)  # Wartość krytyczna t dla danego poziomu istotności i stopni swobody
+    margin_of_error = t_value * std_dev / np.sqrt(len(avg_users_lambda))  # Margines błędu
+    
+    confidence_interval = (avg_avg - margin_of_error, avg_avg + margin_of_error)
+    confidence_intervals.append(confidence_interval)
+    
+    print(f"Lambda = {lambda_val}, Average = {avg_avg}, Standard Deviation = {std_dev}")
+    print(f"Confidence Interval = {confidence_interval}")
+
+# Tworzenie wykresu
+x = list(lambda_values)
+y = avg_avg_users
+y_err = [ci[1] - ci[0] for ci in confidence_intervals]
+
+plt.errorbar(x, y, yerr=y_err, fmt='o', capsize=5)
+plt.xlabel('Lambda')
+plt.ylabel('Average Users')
+plt.title('Average Users with Confidence Intervals')
+plt.xticks(x)
+plt.grid(True)
 plt.show()
