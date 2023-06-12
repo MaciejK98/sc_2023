@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 
 class RNG:
-    A = 16807
-    Q = 127773
+    A = 16807 #mnożnik generujący
+    Q = 127773 
     R = 2836
-    M = (A * Q) + R
+    M = (A * Q) + R #najwieksza liczba jaka może się pojawić
     def __init__(self, seeds, intensity):
         self.seedEXP = seeds[0]
         self.seedUNI = seeds[1]
@@ -62,32 +62,32 @@ class RNG:
         return x, y
 
 
-def seedGenerator():
-    seeds=[]
-    seedGenerator = RNG([1, 1, 1, 1], 1)
-    for i in range(10):
-        for j in range(4):
-            if j == 0:
-                seeds.append([])  # Tworzenie listy dla każdego zestawu
-            xx ,res = seedGenerator.GenerateUniform()  # Wygenerowanie jednego ziarna
-            seeds[i].append(xx)  # Dodanie ziarna do odpowiedniego zestawu
+# def seedGenerator():
+#     seeds=[]
+#     seedGenerator = RNG([1, 1, 1, 1], 1)
+#     for i in range(10):
+#         for j in range(4):
+#             if j == 0:
+#                 seeds.append([])  # Tworzenie listy dla każdego zestawu
+#             xx ,res = seedGenerator.GenerateUniform()  # Wygenerowanie jednego ziarna
+#             seeds[i].append(xx)  # Dodanie ziarna do odpowiedniego zestawu
 
-        # Aktualizacja ziarna początkowego dla kolejnego zestawu
-        for _ in range(10000000):
-            seedGenerator.GenerateUniform()  # Przesunięcie generatora o 10 milionów zmiennych
+#         # Aktualizacja ziarna początkowego dla kolejnego zestawu
+#         for _ in range(10000000):
+#             seedGenerator.GenerateUniform()  # Przesunięcie generatora o 10 milionów zmiennych
 
-    # Wyświetlenie wygenerowanych ziaren
-    for i in range(10):
-        print(f"Zestaw {i+1}: {seeds[i]}")
+#     # Wyświetlenie wygenerowanych ziaren
+#     for i in range(10):
+#         print(f"Zestaw {i+1}: {seeds[i]}")
         
-    filename = "seeds.csv"
+#     filename = "seeds.csv"
 
-    import csv
+#     import csv
 
-    with open(filename, mode="w", newline="") as file:
-        writer = csv.writer(file)
-        for item in seeds:
-            writer.writerow(item)
+#     with open(filename, mode="w", newline="") as file:
+#         writer = csv.writer(file)
+#         for item in seeds:
+#             writer.writerow(item)
 
 
 
